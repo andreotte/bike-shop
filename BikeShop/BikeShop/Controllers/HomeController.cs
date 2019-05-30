@@ -31,6 +31,19 @@ namespace BikeShop.Controllers
             return RedirectToAction("Login");
         }
 
+        public ActionResult LogOut()
+        {
+            if(Session["LoggedInUser"] != null)
+            {
+                Session["LoggedInUser"] = null;
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+
         public ActionResult Login()
         {
             return View();
@@ -60,15 +73,14 @@ namespace BikeShop.Controllers
         public ActionResult Shop()
         {
             var items = db.Items.ToArray();
-            Session["inStock"] = items;
-
+            //Session["inStock"] = items;
             return View(items);
         }
 
         public ActionResult Buy(decimal cost, int ItemID)
         {
             Item item = db.Items.Find(ItemID);
-            IEnumerable<User> user = (IEnumerable <User> )Session["LoggedInUser"];
+            IEnumerable<User> user = (IEnumerable<User>)Session["LoggedInUser"];
 
             List<User> users = user.ToList();
             User loggedInUser = users[0];
