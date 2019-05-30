@@ -5,8 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="3e61bb5bf6e74f8bbf84ab8c7de6fc98" Name="Diagram1">
-        <EntityTypeShape EntityType="ShopDBModel.Item" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShopDBModel.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopDBModel.Item" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopDBModel.User" Width="1.5" PointX="9.125" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopDBModel.UserItem" Width="1.5" PointX="4.875" PointY="3.125" />
+        <AssociationConnector Association="ShopDBModel.FK_ItemIS" />
+        <AssociationConnector Association="ShopDBModel.FK_UserHas" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

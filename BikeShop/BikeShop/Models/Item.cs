@@ -14,10 +14,19 @@ namespace BikeShop.Models
     
     public partial class Item
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Item()
+        {
+            this.UserItems = new HashSet<UserItem>();
+        }
+    
         public int ID { get; set; }
         public string ItemName { get; set; }
         public string Description { get; set; }
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> Price { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserItem> UserItems { get; set; }
     }
 }
