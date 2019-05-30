@@ -77,7 +77,7 @@ namespace BikeShop.Controllers
             {
                 loggedInUser.Money -= item.Price;
                 db.Users.AddOrUpdate(loggedInUser);
-
+                item.Quantity -= 1;
                 db.SaveChanges();
             }
             else
