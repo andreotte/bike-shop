@@ -1,3 +1,71 @@
-﻿<br />
+﻿@using BikeShop.Models
+@model IEnumerable<BikeShop.Models.Item>
+
+<br />
+@{
+    
+    IEnumerable<User> user = (IEnumerable<User>)Session["LoggedInUser"];
+    if (user != null)
+    {
+        List<User> users = user.ToList();
+        User loggedInUser = users[0];
+        <p>Logged in: @loggedInUser.UserName</p>
+    }
+
+}
+<br />
+<br />
+
 <h2>Welcome to the bike shop</h2>
+
+<p>@Session["LackOfFundsMessage"]</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => m.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => m.Quantity)
+        </th>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr class="@item.ItemName">
+            <td>
+                @Html.DisplayFor(m => item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Quantity)
+            </td>
+            <td>
+                @if (Session["LoggedInUser"] != null)
+                {
+                    <form action="~/Home/Buy" method="post">
+                        <input type="hidden" name="ItemID" value="@item.ID" />
+                        <input type="hidden" name="cost" value="@item.Price">
+                        <input type="submit" value="Buy">
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+
+
+
 

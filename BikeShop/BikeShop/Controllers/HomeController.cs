@@ -43,8 +43,9 @@ namespace BikeShop.Controllers
             var output = users.Where(u => 
                 u.UserName == userName && 
                 u.Password == password);
-            Session["LoggedInUser"] = output;
 
+            Session["LoggedInUser"] = output;
+            
             if (output.Count() != 0)
             {
                 return RedirectToAction("Shop");
@@ -56,6 +57,36 @@ namespace BikeShop.Controllers
         }
 
         public ActionResult Shop()
+        {
+            var items = db.Items.ToArray();
+            Session["inStock"] = items;
+
+            return View(items);
+        }
+
+        public ActionResult Buy(decimal cost, int ItemID)
+        {
+            Item item = db.Items.Find(ItemID);
+            IEnumerable<User> user = (IEnumerable <User> )Session["LoggedInUser"];
+
+            List<User> users = user.ToList();
+            User loggedInUser = users[0];
+
+            if (item.Price < loggedInUser.Money)
+            {
+                loggedInUser.Money -= item.Price;
+                db.SaveChanges();
+            }
+            else
+            {
+                //This isn't getting passed along
+                TempData["ErrorMessage"] = "You don't have enough money for that purchase.";
+                return RedirectToAction("ErrorPage");
+            }
+            return RedirectToAction("Shop");
+        }
+
+        public ActionResult ErrorPage()
         {
             return View();
         }
