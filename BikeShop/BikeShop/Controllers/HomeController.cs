@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -75,11 +76,12 @@ namespace BikeShop.Controllers
             if (item.Price < loggedInUser.Money)
             {
                 loggedInUser.Money -= item.Price;
+                db.Users.AddOrUpdate(loggedInUser);
+
                 db.SaveChanges();
             }
             else
             {
-                //This isn't getting passed along
                 TempData["ErrorMessage"] = "You don't have enough money for that purchase.";
                 return RedirectToAction("ErrorPage");
             }
