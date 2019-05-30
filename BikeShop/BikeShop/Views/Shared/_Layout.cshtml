@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using BikeShop.Models
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,6 +26,16 @@
                     <li>@Html.ActionLink("Login", "Login", "Home")</li>
                     <li>@Html.ActionLink("Shop", "Shop", "Home")</li>
                     <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
+                    
+                        @if(Session["LoggedInUser"] != null)
+                        {
+                            User u = (User)Session["LoggedInUser"];
+                            <li style="color:white">Logged in: @u.UserName | Available Funds: @u.Money</li>
+                        }
+
+
+                    
+
 
 
                 </ul>

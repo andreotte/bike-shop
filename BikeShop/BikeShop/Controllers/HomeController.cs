@@ -56,11 +56,11 @@ namespace BikeShop.Controllers
 
             var output = users.Where(u => 
                 u.UserName == userName && 
-                u.Password == password);
-
+                u.Password == password).ToList().First();
+            //this isn't a linq cluster, so now I need to make some changes...
             Session["LoggedInUser"] = output;
             
-            if (output.Count() != 0)
+            if (output != null)
             {
                 return RedirectToAction("Shop");
             }
@@ -77,19 +77,22 @@ namespace BikeShop.Controllers
             return View(items);
         }
 
-        public ActionResult Buy(decimal cost, int ItemID)
+        public ActionResult Buy(int ItemID)
         {
             Item item = db.Items.Find(ItemID);
-            IEnumerable<User> user = (IEnumerable<User>)Session["LoggedInUser"];
 
-            List<User> users = user.ToList();
-            User loggedInUser = users[0];
+            //IEnumerable<User> user = (IEnumerable<User>)Session["LoggedInUser"];
+            //List<User> users = user.ToList();
+            //User loggedInUser = users[0];
 
-            if (item.Price < loggedInUser.Money)
+            //This cast breaks it, but I'm not totally sure why
+            User loggedInUser = (User)Session["LoggedInUser"];
+
+            if (item.Price < loggedInUser.Money && item.Quantity > 0)
             {
                 loggedInUser.Money -= item.Price;
-                db.Users.AddOrUpdate(loggedInUser);
                 item.Quantity -= 1;
+                db.Users.AddOrUpdate(loggedInUser);
                 db.SaveChanges();
             }
             else

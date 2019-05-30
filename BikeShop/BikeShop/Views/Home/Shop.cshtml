@@ -2,16 +2,18 @@
 @model IEnumerable<BikeShop.Models.Item>
 
 <br />
-@{
+@*
+    @{
 
-    IEnumerable<User> user = (IEnumerable<User>)Session["LoggedInUser"];
-    if (user != null)
-    {
-        List<User> users = user.ToList();
-        User loggedInUser = users[0];
-        <p>Logged in: @loggedInUser.UserName</p>
+        IEnumerable<User> user = (IEnumerable<User>)Session["LoggedInUser"];
+        if (user != null)
+        {
+            List<User> users = user.ToList();
+            User loggedInUser = users[0];
+            <p>Logged in: @loggedInUser.UserName</p>
+        }
     }
-}
+*@
 <br />
 <br />
 
@@ -53,11 +55,15 @@
             <td>
                 @if (Session["LoggedInUser"] != null)
                 {
+                    @*
+                        @Html.ActionLink("Buy", "Buy", new {id=item.ID })
+                    *@
+
                     <form action="~/Home/Buy" method="post">
                         <input type="hidden" name="ItemID" value="@item.ID" />
-                        <input type="hidden" name="cost" value="@item.Price">
                         <input type="submit" value="One-Click, No Confirmation Buy">
                     </form>
+
                 }
             </td>
         </tr>
