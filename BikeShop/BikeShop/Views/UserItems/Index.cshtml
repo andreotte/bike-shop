@@ -1,0 +1,43 @@
+﻿@model IEnumerable<BikeShop.Models.UserItem>
+@using BikeShop.Models
+@{
+    ViewBag.Title = "Index";
+    
+    User user = (User)Session["LoggedInUser"];
+}
+
+<br />
+<h4>Your Items</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Item.ItemName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.UserName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+
+        if(user.ID == item.UserID)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.UserName)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.UserItemID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.UserItemID })
+                </td>
+            </tr>
+        }
+    }
+
+</table>

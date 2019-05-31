@@ -2,21 +2,7 @@
 @model IEnumerable<BikeShop.Models.Item>
 
 <br />
-@*
-    @{
-
-        IEnumerable<User> user = (IEnumerable<User>)Session["LoggedInUser"];
-        if (user != null)
-        {
-            List<User> users = user.ToList();
-            User loggedInUser = users[0];
-            <p>Logged in: @loggedInUser.UserName</p>
-        }
-    }
-*@
 <br />
-<br />
-
 <h2>Welcome to the bike shop</h2>
 
 <p>@Session["LackOfFundsMessage"]</p>

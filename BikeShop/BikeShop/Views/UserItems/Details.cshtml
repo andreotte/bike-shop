@@ -1,0 +1,45 @@
+﻿@using BikeShop.Models
+@model BikeShop.Models.UserItem
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <hr />
+    <table class="table">
+        <tr>
+            <th>
+                Item
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Item.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Item.Price)
+
+            </th>
+
+        </tr>
+
+
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Item.Price)
+            </td>
+
+        </tr>
+
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

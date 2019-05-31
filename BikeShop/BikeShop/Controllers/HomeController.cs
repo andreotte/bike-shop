@@ -11,7 +11,6 @@ namespace BikeShop.Controllers
     public class HomeController : Controller
     {
         ShopDBEntities db = new ShopDBEntities();
-
         public ActionResult Index()
         {
             return View();
@@ -56,12 +55,12 @@ namespace BikeShop.Controllers
 
             var output = users.Where(u => 
                 u.UserName == userName && 
-                u.Password == password).ToList().First();
-            //this isn't a linq cluster, so now I need to make some changes...
-            Session["LoggedInUser"] = output;
-            
-            if (output != null)
+                u.Password == password);
+
+            if(output.Count() > 0)
             {
+                var loginMatch = output.ToList().First();
+                Session["LoggedInUser"] = loginMatch;
                 return RedirectToAction("Shop");
             }
             else
@@ -73,7 +72,6 @@ namespace BikeShop.Controllers
         public ActionResult Shop()
         {
             var items = db.Items.ToArray();
-            //Session["inStock"] = items;
             return View(items);
         }
 
@@ -81,26 +79,32 @@ namespace BikeShop.Controllers
         {
             Item item = db.Items.Find(ItemID);
 
-            //IEnumerable<User> user = (IEnumerable<User>)Session["LoggedInUser"];
-            //List<User> users = user.ToList();
-            //User loggedInUser = users[0];
-
-            //This cast breaks it, but I'm not totally sure why
             User loggedInUser = (User)Session["LoggedInUser"];
-
-            if (item.Price < loggedInUser.Money && item.Quantity > 0)
-            {
-                loggedInUser.Money -= item.Price;
-                item.Quantity -= 1;
-                db.Users.AddOrUpdate(loggedInUser);
-                db.SaveChanges();
-            }
-            else
+            if(item.Price < loggedInUser.Money)
             {
                 TempData["ErrorMessage"] = "You don't have enough money for that purchase.";
                 return RedirectToAction("ErrorPage");
             }
-            return RedirectToAction("Shop");
+            else if(item.Quantity <= 0)
+            {
+                TempData["ErrorMessage"] = "Sorry, out of stock.";
+                return RedirectToAction("ErrorPage");
+            }
+            else
+            {
+                loggedInUser.Money -= item.Price;
+                item.Quantity -= 1;
+
+                UserItem ui = new UserItem(); 
+
+                ui.UserID = loggedInUser.ID;
+                ui.ItemID = item.ID;
+                db.UserItems.Add(ui);
+                db.Users.AddOrUpdate(loggedInUser);
+                db.SaveChanges();
+            }
+
+            return RedirectToActionPermanent("Index", "UserItems");
         }
 
         public ActionResult ErrorPage()
