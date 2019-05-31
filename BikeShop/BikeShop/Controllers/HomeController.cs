@@ -80,7 +80,7 @@ namespace BikeShop.Controllers
             Item item = db.Items.Find(ItemID);
 
             User loggedInUser = (User)Session["LoggedInUser"];
-            if(item.Price < loggedInUser.Money)
+            if(item.Price > loggedInUser.Money)
             {
                 TempData["ErrorMessage"] = "You don't have enough money for that purchase.";
                 return RedirectToAction("ErrorPage");
