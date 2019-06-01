@@ -17,10 +17,24 @@ namespace BikeShop.Controllers
         private ShopDBEntities db = new ShopDBEntities();
 
         // GET: UserItems
-        public ActionResult Index()
+        //public ActionResult UsersItems()
+        //{
+        //    var userItems = db.UserItems.Include(u => u.Item).Include(u => u.User);
+        //    return View(userItems.ToList());
+        //}
+
+        public ActionResult UsersItems()
         {
-            var userItems = db.UserItems.Include(u => u.Item).Include(u => u.User);
-            return View(userItems.ToList());
+            User user = (User)Session["LoggedInUser"];
+            if (user == null)
+            {
+                return RedirectToActionPermanent("Login", "Home");
+            }
+            else
+            {
+                var userItems = db.UserItems.Include(u => u.Item).Include(u => u.User);
+                return View(userItems.ToList());
+            }
         }
 
         // GET: UserItems/Details/5
@@ -59,7 +73,7 @@ namespace BikeShop.Controllers
             {
                 db.UserItems.Add(userItem);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("UsersItems");
             }
 
             ViewBag.ItemID = new SelectList(db.Items, "ID", "ItemName", userItem.ItemID);
@@ -67,18 +81,7 @@ namespace BikeShop.Controllers
             return View(userItem);
         }
 
-        public ActionResult UsersItems()
-        {
-            User user = (User) Session["LoggedInUser"];
-            if(user == null)
-            {
-                return RedirectToActionPermanent("Login", "Home");
-            }
-            else
-            {
-                return RedirectToAction("Index", "UserItems");
-            }
-        }
+
         // GET: UserItems/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -107,7 +110,7 @@ namespace BikeShop.Controllers
             {
                 db.Entry(userItem).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("UsersItems");
             }
             ViewBag.ItemID = new SelectList(db.Items, "ID", "ItemName", userItem.ItemID);
             ViewBag.UserID = new SelectList(db.Users, "ID", "UserName", userItem.UserID);
@@ -142,7 +145,7 @@ namespace BikeShop.Controllers
             db.Users.AddOrUpdate(user);
             db.UserItems.Remove(userItem);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("UsersItems");
         }
 
         protected override void Dispose(bool disposing)

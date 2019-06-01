@@ -104,7 +104,7 @@ namespace BikeShop.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToActionPermanent("Index", "UserItems");
+            return RedirectToActionPermanent("UsersItems", "UserItems");
         }
 
         public ActionResult ErrorPage()
